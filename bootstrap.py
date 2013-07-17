@@ -49,7 +49,8 @@ hostname, domain = fqdn.split('.', 1)
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(connect, username='root')
+pkey = paramiko.RSAKey.from_private_key_file('/Users/adam/.ssh/work_rsa')
+ssh.connect(connect, username='root', pkey=pkey)
 
 # sometimes facter can't read the domain properly unless you do this
 check_call(ssh, 'echo "domain {}" >> /etc/resolv.conf'.format(domain))
