@@ -3,6 +3,11 @@ class pupgit {
     ensure => installed,
   }
 
+  package {'librarian-puppet-maestrodev':
+    ensure => installed,
+    provider => gem,
+  }
+
   file {'/var/local/puppet.git':
     ensure => directory,
   }
@@ -46,10 +51,16 @@ class pupgit {
       ',
   }
 
-  file {'/root/reapply':
+  file {'/usr/local/bin/run-puppet':
     ensure => present,
     mode => 0700,
     content => '#!/bin/bash
-      puppet apply --modulepath=/var/local/puppet/modules:/var/local/puppet/thirdparty /var/local/puppet/manifests/site.pp',
+      cd /var/local/puppet
+      librarian-puppet install
+      puppet apply --modulepath=./modules:./thirdparty manifests/site.pp',
+  }
+
+  file {'/root/reapply':
+    ensure => absent,
   }
 }
