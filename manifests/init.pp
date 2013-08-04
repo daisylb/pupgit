@@ -3,9 +3,14 @@ class pupgit {
     ensure => installed,
   }
 
+  package {'rubygems':
+    ensure => installed,
+  }
+
   package {'librarian-puppet-maestrodev':
     ensure => installed,
     provider => gem,
+    require => Package['rubygems'],
   }
 
   file {'/var/local/puppet.git':
@@ -47,7 +52,7 @@ class pupgit {
       git fetch /var/local/puppet.git master -q
       git reset --hard FETCH_HEAD -q
       git submodule update --init --recursive -q
-      /root/reapply
+      /usr/local/bin/run-puppet
       ',
   }
 
