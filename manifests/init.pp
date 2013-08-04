@@ -1,16 +1,18 @@
 class pupgit {
-  package {'git':
+  package {'pupgit-git':
+    name => 'git',
     ensure => installed,
   }
 
-  package {'rubygems':
+  package {'pupgit-rubygems':
+    name => 'rubygems',
     ensure => installed,
   }
 
   package {'librarian-puppet-maestrodev':
     ensure => installed,
     provider => gem,
-    require => Package['rubygems'],
+    require => Package['pupgit-rubygems'],
   }
 
   file {'/var/local/puppet.git':
@@ -26,7 +28,7 @@ class pupgit {
     command => '/usr/bin/git init --bare',
     creates => '/var/local/puppet.git/HEAD',
     require => [
-      Package['git'],
+      Package['pupgit-git'],
       File['/var/local/puppet.git'],
     ],
   }
@@ -36,7 +38,7 @@ class pupgit {
     command => '/usr/bin/git init',
     creates => '/var/local/puppet/.git/HEAD',
     require => [
-      Package['git'],
+      Package['pupgit-git'],
       File['/var/local/puppet'],
     ],
   }
